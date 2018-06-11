@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>MongoDB and Mongoose</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/quotes_styles.css">
+  </head>
+  <body>
+    <div class="WRAPPER">
+      <div class="header">
+        <div class="navbar">
+          <h1>Assignment: Quotes Form Submit with MongoDB!</h1>
+        </div>
+      </div>
+      <div class="container">
+
+        <form class="form-control" action="/quotes" method="post">
+          Name: <input type="text" name="name" value="">
+          Quote: <input type="text" name="message" value="">
+          <input class="btn btn-primary" type="submit" name="submit" value="Submit">
+        </form>
+
+        <a class="btn btn-success" href="/quotes">View Quotes</a>
+      </div>
+    </div>
+  </body>
+</html>
