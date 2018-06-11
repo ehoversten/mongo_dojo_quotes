@@ -1,13 +1,25 @@
 // Require the Express Module
-var express = require('express');
+const express = require('express');
 // Create an Express App
-var app = express();
+const app = express();
 // Require body-parser (to receive post data from clients)
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 // Integrate body-parser with our App
 app.use(bodyParser.urlencoded({ extended: true }));
 // Require path
-var path = require('path');
+const path = require('path');
+
+const session = require('express-session');
+
+app.use(session({
+    secret: 'codingmojo',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 }
+}))
+
+const flash = require('express-flash');
+app.use(flash());
 // Setting our Static Folder Directory
 app.use(express.static(path.join(__dirname, './static')));
 // Setting our Views Folder Directory
@@ -19,15 +31,20 @@ app.set('view engine', 'ejs');
 var mongoose = require('mongoose');
 // This is how we connect to the mongodb database using mongoose -- "basic_mongoose" is the name of our db in mongodb -- this should match the name of the db you are going to use for your project.
 mongoose.connect('mongodb://localhost/dojo_quotes');
-// Use native promises
-mongoose.Promise = global.Promise;
+
 
 // DATABASE SCHEMA
 var QuoteSchema = new mongoose.Schema({
- name: String,
- message: String
+ // name: String,
+ // message: String
+ name: { type: String, required: true, minlength: 2 },
+ quote: { type: String, required: true, minlength: 2 },
+ date: { type: Date, default: Date.now}
  // timestamps: { createdAt: 'created_at' }
-})
+}, {timestamps: true })
+
+// Use native promises
+mongoose.Promise = global.Promise;
 
 mongoose.model('Quote', QuoteSchema);
 var Quote = mongoose.model('Quote');
@@ -52,28 +69,33 @@ app.get('/quotes', function(req, res) {
      } else {
        return res.render('quotes', {quotes});
      }
-     // This code will run when the DB is done attempting to retrieve all matching records to {}
-    })
+
+   });
     // res.render('index', {users});
-})
+});
+
 
 app.post('/quotes', function(req, res) {
   console.log("POST DATA", req.body);
   // create a new User with the name and age corresponding to those from req.body
   var quote = new Quote(req.body);
   // var quote = new Quote({name: req.body.name, message: req.body.message}, {timestamps: true});
-  // Try to save that new user to the database (this is the method that actually inserts into the db) and run a callback function with an error (if any) from the operation.
   quote.save(function(err) {
     // if there is an error console.log that something went wrong!
     if(err) {
-      console.log('something went wrong');
+      console.log('something went wrong', err);
+      // throw a flash error messsage
+      for(var key in err.errors){
+          req.flash('fail', err.errors[key].message);
+      }
+      res.redirect('/');
     } else { // else console.log that we did well and then redirect to the root route
       console.log('successfully added a quote!');
       res.redirect('/quotes');
     }
-  })
-})
+  });
+});
 
 app.listen(8000, function() {
   console.log("Listening on PORT:8000");
-})
+});

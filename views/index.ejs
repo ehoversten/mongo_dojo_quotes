@@ -15,10 +15,17 @@
         </div>
       </div>
       <div class="container">
+        
+        <% if(messages.fail) { %>
+          <% for (var x of messages.fail) { %>
+            <h3><%= x %></h3>
+          <% } %>
+        <% } %>
 
         <form class="form-control" action="/quotes" method="post">
+
           Name: <input type="text" name="name" value="">
-          Quote: <input type="text" name="message" value="">
+          Quote: <input type="text" name="quote" value="">
           <input class="btn btn-primary" type="submit" name="submit" value="Submit">
         </form>
 

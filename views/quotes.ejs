@@ -18,11 +18,12 @@
         <h2>Here are all the quotes:</h2>
         <% for (var x in quotes) { %>
         <div class="message">
-          <h2>Quote: <%= quotes[x].message %></h2>
+          <h2>Quote: <%= quotes[x].quote %></h2>
           <p>by: <%= quotes[x].name %> at <%= quotes[x].createdAt %></p>
 
         </div>
         <% } %>
+
       </div>
       <a class="btn btn-success" href="/">Back</a>
     </div>
